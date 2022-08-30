@@ -12,11 +12,12 @@ The process requires a human in the loop to monitor the progress and navigate ar
 
 Requires:
 * MacOS
-* Safari, with [Browser Automation Enabled](https://developer.apple.com/documentation/webkit/testing_with_webdriver_in_safari?changes=_2)
+* Chrome or Safari, with [Browser Automation Enabled](https://developer.apple.com/documentation/webkit/testing_with_webdriver_in_safari?changes=_2)
 * NodeJS
 
 Setup:
 ```console
+brew install --cask chromedriver
 cd wg-gesucht
 npm install
 ```

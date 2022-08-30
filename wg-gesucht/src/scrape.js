@@ -207,7 +207,8 @@ xpath = '//*[@id="cmpwelcomebtnyes"]/a';
 let startUrl =
   "https://www.wg-gesucht.de/wg-zimmer-und-wohnungen-in-Wien.163.0+2.1.0.html?offer_filter=1&city_id=163&sort_column=0&sort_order=0&noDeact=1&categories%5B%5D=0&categories%5B%5D=2&rent_types%5B%5D=1&rMax=650";
 
-let driver = await new Builder().forBrowser("safari").build();
+// let driver = await new Builder().forBrowser("safari").build();
+let driver = await new Builder().forBrowser("chrome").build();
 await driver.get(startUrl);
 
 // accept cookie banner if it exists

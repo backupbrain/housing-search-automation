@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/chromedriver": "^81.0.1",
+    "chromedriver": "^104.0.0",
     "selenium-webdriver": "^4.4.0",
     "typescript": "^4.8.2"
   },
