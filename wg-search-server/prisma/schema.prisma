@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// singleton!
+model WgScraper {
+  id          String  @id @default(uuid())
+  isRunning   Boolean
+  currentPage Int
+  currentRow  Int
+  lastError   String?
+}
+
+model User {
+  id             String  @id @default(uuid())
+  email          String
+  hashedPassword String
+  bio            String?
+}
+
+model WgHousingOffer {
+  id                     String    @id @default(uuid())
+  name                   String
+  url                    String
+  contactUrl             String?
+  address                String?
+  district               Int?
+  description            String?
+  numTenants             Int?
+  startDate              DateTime?
+  endDate                DateTime?
+  contactName            String?
+  rentPrice              Int?
+  extraPrice             Int?
+  otherPrice             Int?
+  depositPrice           Int?
+  transferPrice          Int?
+  furnished              Boolean
+  washingMachine         Boolean
+  wifi                   Boolean
+  nonSmoking             Boolean?
+  englishOk              Boolean
+  students               Boolean?
+  lgbtqOk                Boolean?
+  malesOk                Boolean
+  contacted              Boolean   @default(false)
+  englishOnlyDescription String?
+  descriptionSemantics   String?
+}
+
+model HousingSearch {
+  id                  String   @id @default(uuid())
+  userId              String
+  minSize             Int
+  maxSize             Int
+  earliestStart       DateTime
+  earliestEnd         DateTime
+  latestStart         DateTime
+  latestEnd           DateTime
+  minRent             Int
+  maxRent             Int
+  maxInitialPrice     Int
+  isMale              Boolean
+  wantsFurnished      Boolean?
+  wantsWifi           Boolean?
+  wantsWashingMachine Boolean?
+  smokingOk           Boolean
+  englishOnly         Boolean
+  isStudent           Boolean
+  wantsLgbtq          Boolean
+  minRoommates        Int
+  maxRoomates         Int
+  desiredDistricts    String?
+  housingInterests    String?
+}
+
+model Match {
+  id                          String  @id @default(uuid())
+  userId                      String
+  housingSearchId             String
+  wgHousingOfferId            String
+  proximityToDesiredDistricts String?
+  responsePrompts             String?
+  response                    String?
+}

@@ -26,5 +26,5 @@ Running requires opening the code and executing parts into the NodeJS terminal
 
 ```console
 code . &
-node
+node --experimental-fetch --experimental-repl-await
 ```
