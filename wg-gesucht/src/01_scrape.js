@@ -28,4 +28,4 @@ enrichedOffers = await scrapeEnrichedOffers(
   enrichedOffers,
   minutesUntilBreak
 );
-await driver.close();
+await driver.quit();

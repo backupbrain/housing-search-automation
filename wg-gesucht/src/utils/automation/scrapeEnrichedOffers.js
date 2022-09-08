@@ -14,11 +14,11 @@ export let scrapeEnrichedOffers = async (
 ) => {
   // let enrichedOffers = [];
   let onBreak = false;
-  let morePagesAvailable = true; // await areMorePagesAvailable(driver);
+  let isDone = false; // await areMorePagesAvailable(driver);
   // let currentPage = 1;
   let startTime = new Date();
   // let minutesUntilBreak = Math.floor(Math.random() * 50 + 30);
-  while (!onBreak && morePagesAvailable) {
+  while (!onBreak && isDone) {
     console.log(`Starting page ${currentPage}`);
     let currentOffer = 0;
     let mainList = await driver.findElement(By.id("main_column"));
@@ -87,6 +87,8 @@ export let scrapeEnrichedOffers = async (
       currentPage += 1;
       morePagesAvailable = true;
       await delaySeconds(3, 7);
+    } else {
+      isDone = true;
     }
   }
   return enrichedOffers;
