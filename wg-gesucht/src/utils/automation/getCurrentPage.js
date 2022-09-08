@@ -10,5 +10,5 @@ export let getCurrentPage = async (driver) => {
       return parseInt(queryParamSet[1]);
     }
   }
-  return undefined;
+  return 1;
 };

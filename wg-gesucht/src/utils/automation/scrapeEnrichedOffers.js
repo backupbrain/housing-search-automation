@@ -1,4 +1,4 @@
-import { By } from "selenium-webdriver";
+let { By } = require("selenium-webdriver");
 import { saveEnrichedOffers } from "../database/saveEnrichedOffers";
 import { delaySeconds } from "../delaySeconds";
 import { areMorePagesAvailable } from "./areMorePagesAvailable";
@@ -14,7 +14,7 @@ export let scrapeEnrichedOffers = async (
 ) => {
   // let enrichedOffers = [];
   let onBreak = false;
-  let morePagesAvailable = await areMorePagesAvailable(driver);
+  let morePagesAvailable = true; // await areMorePagesAvailable(driver);
   // let currentPage = 1;
   let startTime = new Date();
   // let minutesUntilBreak = Math.floor(Math.random() * 50 + 30);

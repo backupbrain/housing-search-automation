@@ -1,4 +1,4 @@
-import { By } from "selenium-webdriver";
+let { By } = require("selenium-webdriver");
 
 export let clickNextButton = async (driver) => {
   let lastNavigationButton = await driver.findElement(

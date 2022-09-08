@@ -1,4 +1,4 @@
-const { By } = require("selenium-webdriver");
+let { By } = require("selenium-webdriver");
 const { delaySeconds } = require("../delaySeconds");
 
 let getDistrict = (address) => {

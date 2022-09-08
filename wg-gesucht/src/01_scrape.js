@@ -4,10 +4,13 @@ const {
   scrapeEnrichedOffers,
 } = require("./utils/automation/scrapeEnrichedOffers");
 const { startBrowser } = require("./utils/automation/startBrowser");
+const { acceptCookies } = require("./utils/automation/acceptCookies");
+const { getCurrentPage } = require("./utils/automation/getCurrentPage");
 const { openEnrichedOffers } = require("./utils/database/openEnrichedOffers");
 
 let driver = await startBrowser();
 await goToSearchPage(driver);
+await acceptCookies(driver);
 
 let enrichedOffers = [];
 enrichedOffers = openEnrichedOffers();
@@ -25,3 +28,4 @@ enrichedOffers = await scrapeEnrichedOffers(
   enrichedOffers,
   minutesUntilBreak
 );
+await driver.close();
