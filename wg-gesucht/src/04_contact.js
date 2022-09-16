@@ -43,3 +43,7 @@ for (let offer of answeredResponses) {
 saveAnsweredResponses(answeredResponses);
 
 await sendMessagesToOffers(driver, answeredResponses, minutesUntilBreak);
+
+saveAnsweredResponses(answeredResponses);
+
+await driver.quit();
