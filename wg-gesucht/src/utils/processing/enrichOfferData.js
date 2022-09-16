@@ -1,4 +1,8 @@
 const { cardinalizeNumber } = require("./cardinalizeNumber");
+const { getOfferLength } = require("./getOfferLength");
+const { splitLanguages } = require("./splitLanguages");
+const { translateGermanToEnglish } = require("./translate");
+const { splitName } = require("./splitName");
 
 export let enrichOfferData = async (offers) => {
   for (let row in offers) {
@@ -33,9 +37,9 @@ export let enrichOfferData = async (offers) => {
     } else {
       potentialOffer.cardinalizedDistrict = undefined;
     }
-    potentialOffer.offerLength = getOfferLength1(potentialOffer);
+    potentialOffer.offerLength = getOfferLength(potentialOffer);
     // if there is English and German in the ad, strip out the German
-    let splitText = await splitLanguages1(potentialOffer.description);
+    let splitText = await splitLanguages(potentialOffer.description);
     potentialOffer.splitDescription = splitText;
     potentialOffer.wasTranslated = false;
     // if it is German only, translate to English

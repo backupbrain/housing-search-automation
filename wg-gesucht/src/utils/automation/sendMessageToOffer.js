@@ -1,6 +1,8 @@
 import { By } from "selenium-webdriver";
 import { delaySeconds } from "../delaySeconds";
 import { translateEnglishToGerman } from "../processing/translate";
+import { agreeToSafety } from "./agreeToSafety";
+import { doesElementExist } from "./doesElementExist";
 import { writeMessage } from "./writeMessage";
 
 export let sendMessageToOffer = async (driver, row, potentialOffer) => {
@@ -11,16 +13,25 @@ export let sendMessageToOffer = async (driver, row, potentialOffer) => {
   );
   let hasOfferExpired = await offerExpiredAlert.isDisplayed();
   if (hasOfferExpired) {
-    console.log(`Offer ${row + 1} expired`);
+    console.log(`Offer ${parseInt(row) + 1} expired`);
     potentialOffer.expired = true;
     return;
   }
-  const messageButton = await driver.findElement(
-    By.xpath(
-      '//div[contains(@class,"rhs_contact_information")]' +
-        '/div[2]/div/div/a[contains(@class,"wgg_orange")]'
-    )
+  const messageButtonXpath =
+    '//div[contains(@class,"rhs_contact_information")]' +
+    '/div[2]/div/div/a[contains(@class,"wgg_orange")]';
+  const doesMessageButtonExist = await doesElementExist(
+    driver,
+    messageButtonXpath
   );
+  if (!doesMessageButtonExist) {
+    console.log(
+      `Offer ${parseInt(row) + 1} is doesn't have a messaging button`
+    );
+    potentialOffer.expired = true;
+    return;
+  }
+  const messageButton = await driver.findElement(By.xpath(messageButtonXpath));
   await driver.executeScript("return arguments[0].click()", messageButton);
   delaySeconds(1, 5);
   await agreeToSafety(driver);

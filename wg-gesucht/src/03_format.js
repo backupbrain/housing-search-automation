@@ -19,9 +19,9 @@ let bio = `
 let stopSequence = "=====";
 let offers = openPotentialOffers();
 
-await enrichOfferData(offers);
-await buildPrompts(offers, bio);
-await writeResponses(offers, stopSequence);
-await translateResponses(offers);
+let answeredOffers = await enrichOfferData(offers);
+answeredOffers = await buildPrompts(offers, bio);
+answeredOffers = await writeResponses(offers, stopSequence);
+answeredOffers = await translateResponses(offers);
 
-saveAnsweredResponses();
+saveAnsweredResponses(answeredOffers);

@@ -1,3 +1,5 @@
+const { translateEnglishToGerman } = require("./translate");
+
 // write responses
 export let translateResponses = async (offers) => {
   for (let row in offers) {

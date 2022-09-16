@@ -11,9 +11,8 @@ export let goToSearchPage = async (driver) => {
     sort_column: sortColumn,
     sort_order: sortOrder,
     noDeact,
-    "categories%5B%5D": 0,
-    "categories%5B%5D": 2,
-    "rent_types%5B%5D": 1,
+    "categories%5B%5D": 0, // 0 = shared, 1 = 1 room, 2 = apartment, 3 = house
+    "rent_types%5B%5D": 1, // 0 = permanent, 1 = temporary, 2 = overnight
     rMax: maxRent,
   };
   let queryPairs = [];

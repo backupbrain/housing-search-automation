@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node src/test.ts",
+    "scrape": "node src/01_scrape.js",
+    "filter": "node src/02_filter.js",
+    "format": "node src/03_format.js",
+    "contact": "node src/04_contact.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,6 +16,7 @@
   "dependencies": {
     "@types/chromedriver": "^81.0.1",
     "chromedriver": "^104.0.0",
+    "cld": "^2.8.4",
     "dotenv": "^16.0.2",
     "libxmljs": "^0.19.10",
     "openai": "^3.0.0",

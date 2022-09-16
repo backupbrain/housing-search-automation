@@ -6,6 +6,7 @@ import { sendMessageToOffer } from "./sendMessageToOffer";
 export let sendMessagesToOffers = async (driver, offers, minutesUntilBreak) => {
   let startTime = new Date();
   for (let row in offers) {
+    console.log(`Applying to row ${row}`);
     let potentialOffer = offers[row];
     let currentTime = new Date();
     let timeSinceStart = currentTime - startTime;
@@ -27,7 +28,7 @@ export let sendMessagesToOffers = async (driver, offers, minutesUntilBreak) => {
       console.log(`Offer ${row + 1} already contacted`);
       continue;
     }
-    if (!potentialOffer.message) {
+    if (!potentialOffer.response) {
       console.log(`No message available for offer ${row + 1}`);
       continue;
     }
@@ -38,5 +39,5 @@ export let sendMessagesToOffers = async (driver, offers, minutesUntilBreak) => {
     potentialOffer.contacted = true;
     saveAnsweredResponses(offers);
   }
-  return offers;
+  // return offers;
 };

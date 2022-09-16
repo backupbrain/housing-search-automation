@@ -1,4 +1,5 @@
 let { By } = require("selenium-webdriver");
+const { delaySeconds } = require("../delaySeconds");
 
 export let login = async (driver, email, password) => {
   // let menu = await driver.findElement(By.id("burger_toggle"));
@@ -12,7 +13,7 @@ export let login = async (driver, email, password) => {
     menu
   );
   await driver.executeScript("return arguments[0].click()", menu);
-  await delayForSeconds(2, 3);
+  await delaySeconds(2, 3);
 
   // let registerLink = await driver.findElement(
   //   By.xpath('//div[contains(@class,"drawer_content")]/a[7]')
@@ -25,14 +26,14 @@ export let login = async (driver, email, password) => {
   await driver.executeScript("return arguments[0].focus()", emailInput);
   await emailInput.clear();
   await emailInput.sendKeys(email);
-  await delayForSeconds(2, 3);
+  await delaySeconds(2, 3);
   let passwordInput = await driver.findElement(By.id("login_password"));
   await driver.executeScript("return arguments[0].focus()", passwordInput);
   await passwordInput.clear();
   await passwordInput.sendKeys(password);
-  await delayForSeconds(2, 3);
+  await delaySeconds(2, 3);
 
   let loginButton = await driver.findElement(By.id("login_submit"));
   await driver.executeScript("return arguments[0].click()", loginButton);
-  await delayForSeconds(20, 30);
+  await delaySeconds(20, 30);
 };

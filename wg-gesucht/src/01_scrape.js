@@ -21,7 +21,11 @@ for (let enrichedOffer of enrichedOffers) {
 let currentPage = await getCurrentPage(driver); // 1
 let minutesUntilBreak = Math.floor(Math.random() * 50 + 30);
 
-enrichedOffers = await scrapeEnrichedOffers(
+console.log(`Starting on page ${currentPage}`);
+console.log(`Working for ${minutesUntilBreak} minutes before break`);
+
+// enrichedOffers =
+await scrapeEnrichedOffers(
   driver,
   visitedUrls,
   currentPage,

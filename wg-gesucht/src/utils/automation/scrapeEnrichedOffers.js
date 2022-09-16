@@ -18,7 +18,7 @@ export let scrapeEnrichedOffers = async (
   // let currentPage = 1;
   let startTime = new Date();
   // let minutesUntilBreak = Math.floor(Math.random() * 50 + 30);
-  while (!onBreak && isDone) {
+  while (!onBreak && !isDone) {
     console.log(`Starting page ${currentPage}`);
     let currentOffer = 0;
     let mainList = await driver.findElement(By.id("main_column"));
@@ -78,18 +78,24 @@ export let scrapeEnrichedOffers = async (
         listItems = await mainList.findElements(
           By.xpath('//div[contains(@class,"offer_list_item")]')
         );
+      } else {
+        console.log(
+          `Already visited row ${currentOffer} on page ${currentPage}`
+        );
       }
       currentOffer += 1;
     }
     morePagesAvailable = await areMorePagesAvailable(driver);
     if (morePagesAvailable) {
+      console.log("More pages are available");
       await clickNextButton(driver);
       currentPage += 1;
       morePagesAvailable = true;
       await delaySeconds(3, 7);
     } else {
+      console.log("No more pages are available");
       isDone = true;
     }
   }
-  return enrichedOffers;
+  // return enrichedOffers;
 };

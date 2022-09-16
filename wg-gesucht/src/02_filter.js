@@ -1,3 +1,4 @@
+import { openEnrichedOffers } from "./utils/database/openEnrichedOffers";
 import { savePotentialOffers } from "./utils/database/savePotentialOffers";
 import { offersAcceptingMen } from "./utils/filter/offersAcceptingMen";
 import { offersLastingAtLeast } from "./utils/filter/offersLastingAtLeast";
@@ -16,6 +17,9 @@ let endDates = {
   earliest: new Date("2022-12-25"), // earliestEnd
   latest: new Date("2023-01-05"), // latestEnd
 };
+
+let offers = [];
+offers = openEnrichedOffers();
 
 let potentialOffers = offers.slice();
 potentialOffers = offersWithFeatures(potentialOffers);
