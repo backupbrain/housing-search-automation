@@ -36,6 +36,10 @@ export let buildPrompts = async (offers, bio) => {
     // * lgbtq, genders, students, etc
     // * make sure to include name of landlord
     // * aim for X number of words, Y number of paragraphs
+    if (potentialOffer.prompt) {
+      console.log(`Offer ${row + 1} already has prompt`);
+      continue;
+    }
     potentialOffer.prompt = buildPrompt(bio, potentialOffer);
     // saveAnsweredResponses(offers);
   }
