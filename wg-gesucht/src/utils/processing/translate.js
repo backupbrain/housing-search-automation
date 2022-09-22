@@ -1,4 +1,5 @@
 require("dotenv").config();
+import { delaySeconds } from "../delaySeconds";
 
 export let translate = async (text, fromCode, toCode) => {
   console.log(`translating ${fromCode} -> ${toCode}: `);

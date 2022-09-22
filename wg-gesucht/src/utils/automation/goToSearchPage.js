@@ -21,5 +21,6 @@ export let goToSearchPage = async (driver) => {
   }
   let queryString = queryPairs.join("&");
   let startUrl = `https://www.wg-gesucht.de/wg-zimmer-und-wohnungen-in-Wien.163.0+2.1.0.html?${queryString}`;
+  console.log(startUrl);
   await driver.get(startUrl);
 };
