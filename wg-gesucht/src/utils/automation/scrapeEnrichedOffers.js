@@ -1,18 +1,20 @@
 let { By } = require("selenium-webdriver");
-import { saveEnrichedOffers } from "../database/saveEnrichedOffers";
+import { addOffer } from "../database/addOffer";
 import { delaySeconds } from "../delaySeconds";
 import { areMorePagesAvailable } from "./areMorePagesAvailable";
 import { clickNextButton } from "./clickNextButton";
 import { enrichOffer } from "./enrichOffer";
+import { getOfferData } from "./getOfferData";
 
 export let scrapeEnrichedOffers = async (
   driver,
   visitedUrls,
   currentPage,
-  enrichedOffers,
-  minutesUntilBreak
+  minutesUntilBreak,
+  searchId,
+  existingOfferUrls
 ) => {
-  // let enrichedOffers = [];
+  let visitedUrls = existingOfferUrls.slice();
   let onBreak = false;
   let isDone = false; // await areMorePagesAvailable(driver);
   // let currentPage = 1;
@@ -61,17 +63,15 @@ export let scrapeEnrichedOffers = async (
 
         let enrichedOffer = await enrichOffer(driver);
         // enrichedOffer.url = url;
-        enrichedOffer.title = offerData.title;
-        enrichedOffer.numTenants = offerData.numTenants;
-        enrichedOffer.url = offerData.url;
-        enrichedOffer.contact = offerData.contact;
-        enrichedOffer.roomSize = offerData.size;
-        enrichedOffer.dates = offerData.dates;
-        enrichedOffer.page = currentPage;
-        enrichedOffer.row = currentOffer;
+        let combinedOffer = {
+          ...offerData,
+          ...enrichedOffer,
+          page: currentPage,
+          row: currentOffer,
+          wasEnriched: true,
+        };
         visitedUrls.add(url);
-        enrichedOffers.push(enrichedOffer);
-        saveEnrichedOffers(enrichedOffers);
+        await addOffer(searchId, combinedOffer);
         await driver.executeScript("history.back()");
         await delaySeconds(5, 6);
         mainList = await driver.findElement(By.id("main_column"));
@@ -85,7 +85,7 @@ export let scrapeEnrichedOffers = async (
       }
       currentOffer += 1;
     }
-    morePagesAvailable = await areMorePagesAvailable(driver);
+    let morePagesAvailable = await areMorePagesAvailable(driver);
     if (morePagesAvailable) {
       console.log("More pages are available");
       await clickNextButton(driver);
@@ -97,5 +97,4 @@ export let scrapeEnrichedOffers = async (
       isDone = true;
     }
   }
-  // return enrichedOffers;
 };

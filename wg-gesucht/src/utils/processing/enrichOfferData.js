@@ -27,7 +27,10 @@ export let enrichOfferData = async (offers) => {
       continue;
     }
     // get the contact's first and last name
-    potentialOffer.contactNames = splitName(potentialOffer.contact);
+    let contactNames = splitName(potentialOffer.contact);
+    potentialOffer.contactFirstName = contactNames.first;
+    potentialOffer.contactMiddleName = contactNames.middle;
+    potentialOffer.contactLastName = contactNames.last;
 
     // cardinalize the district
     if (potentialOffer.district) {
@@ -37,22 +40,28 @@ export let enrichOfferData = async (offers) => {
     } else {
       potentialOffer.cardinalizedDistrict = undefined;
     }
-    potentialOffer.offerLength = getOfferLength(potentialOffer);
+    let offerLength = getOfferLength(potentialOffer);
+    potentialOffer.monthsOffered = offerLength.months;
+    potentialOffer.weeksOffered = offerLength.weeks;
+    potentialOffer.daysOffered = offerLength.days;
+
     // if there is English and German in the ad, strip out the German
     let splitText = await splitLanguages(potentialOffer.description);
-    potentialOffer.splitDescription = splitText;
-    potentialOffer.wasTranslated = false;
+    potentialOffer.englishDescription = splitText.english;
+    potentialOffer.germanDescription = splitText.german;
+    potentialOffer.officialDescription = splitText.english;
+    potentialOffer.wasDescriptionTranslated = false;
     // if it is German only, translate to English
     if (
-      !potentialOffer.splitDescription.english &&
-      potentialOffer.splitDescription.german
+      !potentialOffer.englishDescription &&
+      potentialOffer.germanDescription
     ) {
       let englishTranslation = await translateGermanToEnglish(
-        potentialOffer.splitDescription.german
+        potentialOffer.germanDescription
       );
-      potentialOffer.splitDescription.english = englishTranslation;
-      potentialOffer.wasTranslated = true;
+      potentialOffer.englishDescription = englishTranslation;
+      potentialOffer.officialDescription = englishTranslation;
+      potentialOffer.wasDescriptionTranslated = true;
     }
-    saveAnsweredResponses(offers);
   }
 };

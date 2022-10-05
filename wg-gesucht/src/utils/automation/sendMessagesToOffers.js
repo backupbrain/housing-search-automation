@@ -1,4 +1,4 @@
-import { saveAnsweredResponses } from "../database/saveAnsweredResponses";
+import { prisma } from "@prisma/client";
 import { delaySeconds } from "../delaySeconds";
 import { sendMessage } from "./sendMessage";
 import { sendMessageToOffer } from "./sendMessageToOffer";
@@ -36,8 +36,10 @@ export let sendMessagesToOffers = async (driver, offers, minutesUntilBreak) => {
     // are we nervous before we send?
     delaySeconds(2, 10);
     await sendMessage(driver);
-    potentialOffer.contacted = true;
-    saveAnsweredResponses(offers);
+    // potentialOffer.contacted = true;
+    await prisma.offer.update({
+      where: { id: potentialOffer.id },
+      data: { wasContacted: true },
+    });
   }
-  // return offers;
 };

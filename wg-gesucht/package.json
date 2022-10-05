@@ -5,15 +5,17 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node src/test.ts",
-    "scrape": "node src/01_scrape.js",
-    "filter": "node src/02_filter.js",
-    "format": "node src/03_format.js",
-    "contact": "node src/04_contact.js",
+    "init": "node --experimental-fetch --experimental-repl-await src/00_initialize.js",
+    "scrape": "node --experimental-fetch --experimental-repl-await src/01_scrape.js",
+    "filter": "node --experimental-fetch --experimental-repl-await src/02_filter.js",
+    "format": "node --experimental-fetch --experimental-repl-await src/03_format.js",
+    "contact": "node --experimental-fetch --experimental-repl-await src/04_contact.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^4.4.0",
     "@types/chromedriver": "^81.0.1",
     "chromedriver": "^104.0.0",
     "cld": "^2.8.4",
@@ -24,6 +26,7 @@
     "typescript": "^4.8.2"
   },
   "devDependencies": {
-    "@types/selenium-webdriver": "^4.1.2"
+    "@types/selenium-webdriver": "^4.1.2",
+    "prisma": "^4.4.0"
   }
 }

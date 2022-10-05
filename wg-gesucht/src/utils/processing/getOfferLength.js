@@ -8,6 +8,6 @@ export let getOfferLength = (offer) => {
   return {
     days: numDays,
     months: numMonths,
-    weesk: numWeeks,
+    weeks: numWeeks,
   };
 };

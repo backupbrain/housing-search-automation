@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  hashedPassword String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  profiles       Profile[]
+}
+
+model Profile {
+  id              String   @id @default(uuid())
+  userId          String
+  firstName       String
+  lastName        String?
+  email           String
+  websiteUsername String?
+  websitePassword String?
+  bio             String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  searches        Search[]
+}
+
+model Search {
+  id                      String    @id @default(uuid())
+  profileId               String
+  cityId                  Int       @default(163) // 163 = vienna
+  minPrice                Int?
+  maxPrice                Int?
+  startDateMin            DateTime?
+  startDateMax            DateTime?
+  endDateMin              DateTime?
+  endDateMax              DateTime?
+  minRoomSizeSquareMeters Int?
+  mustBeFurnished         Boolean   @default(false)
+  needsWashingMachine     Boolean   @default(false)
+  needsWifi               Boolean   @default(false)
+  mustBeStudensOk         Boolean   @default(false)
+  mustBeEnglishOk         Boolean   @default(false)
+  mustBeMalesOk           Boolean   @default(false)
+  mustBeLgbtqOk           Boolean   @default(false)
+  mustBeNonSmoking        Boolean   @default(false)
+  rentTypes               String?   @default("[1]") // 0 = permanent, 1 = temporary, 2 = overnight
+  categories              String?   @default("[0]") // 0 = shared, 1 = 1 room, 2 = apartment, 3 = house
+  districts               String?   @default("[1, 2, 3, 4, 5, 6, 7, 8, 9]")
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  profile                 Profile   @relation(fields: [profileId], references: [id])
+  offers                  Offer[]
+}
+
+model Offer {
+  id                        String    @id @default(uuid())
+  searchId                  String
+  page                      Int       @default(1)
+  row                       Int       @default(1)
+  url                       String
+  contactUrl                String?
+  title                     String
+  address                   String?
+  district                  Int?
+  cardinalizedDisrtict      String?
+  contactName               String?
+  contactFirstName          String?
+  contactMiddleName         String?
+  contactLastName           String?
+  numTenants                Int?
+  roomSizeSquareMeters      Int?
+  apartmentSizeSquareMeters Int?
+  startDate                 DateTime?
+  endDate                   DateTime?
+  daysOffered               Int?
+  monthsOffered             Int?
+  weeksOffered              Int?
+  rentPrice                 Int?
+  depositPrice              Int       @default(0)
+  extraCost                 Int       @default(0)
+  otherCost                 Int       @default(0)
+  transferCost              Int       @default(0)
+  rawDescription            String?
+  germanDescription         String?
+  englishDescription        String?
+  isGerman                  Boolean?
+  isFurnished               Boolean?
+  hasWashingMachine         Boolean?
+  hasWifi                   Boolean?
+  studentsOk                Boolean?
+  englishOk                 Boolean?
+  malesOk                   Boolean?
+  lgbtqOk                   Boolean?
+  nonSmoking                Boolean?
+  responsePrompt            String?
+  englishResponse           String?
+  germanResponse            String?
+  officialResponse          String?
+  wasDescriptionTranslated  Boolean   @default(false)
+  wasEnriched               Boolean   @default(false)
+  wasAnalyzed               Boolean   @default(false)
+  wasFiltered               Boolean   @default(false)
+  wasResponseTranslated     Boolean   @default(false)
+  wasContacted              Boolean   @default(false)
+  wasResponseRespondedTo    Boolean   @default(false)
+  wasRejected               Boolean?
+  html                      String?
+  search                    Search    @relation(fields: [searchId], references: [id], onDelete: Cascade)
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+}

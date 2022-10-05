@@ -1,6 +1,6 @@
-export let buildPrompt = (bio, potentialOffer) => {
+export let buildPrompt = (bio, offer) => {
   let maxMonths = 3;
-  let numMonths = Math.min(potentialOffer.offerLength.months, maxMonths);
+  let numMonths = Math.min(offer.monthsOffered, maxMonths);
 
   const prompt = `BEGIN MY BIO
 
@@ -10,16 +10,16 @@ export let buildPrompt = (bio, potentialOffer) => {
 
   BEGIN HOUSING AD
 
-  ${potentialOffer.splitDescription.english}
+  ${offer.englishDescription}
 
   END HOUSING AD
 
 Write a cheerful three paragraph introduction to ${
-    potentialOffer.contactNames.first || "Sir or madam"
+    offer.contactFirstName || "Sir or madam"
   } explaining why I'm a good fit as a roommate for this apartment.
 
 Mention reasons why I might enjoy the ${
-    potentialOffer.cardinalizedDistrict
+    offer.cardinalizedDistrict
   } district of Vienna, that I'm looking to stay about ${numMonths} month${
     numMonths === 1 ? "" : "s"
   } or longer and use information from my bio.

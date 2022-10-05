@@ -16,34 +16,28 @@ export let enrichOffer = async (driver) => {
     numTenants: undefined,
     url: undefined,
     roomSize: undefined,
-    apartmentSize: undefined,
+    apartmentSizeSquareMeters: undefined,
     contact: undefined,
     dates: undefined,
     html: undefined,
-    prices: {
-      rent: undefined,
-      extra: undefined,
-      other: undefined,
-      deposit: undefined,
-      transfer: undefined,
-    },
+    rentPrice: undefined,
+    extraCost: undefined,
+    otherCost: undefined,
+    depositPrice: undefined,
+    transferCost: undefined,
     address: undefined,
     district: undefined,
-    description: undefined,
-    features: {
-      isFurnished: false,
-      hasWashingMachine: false,
-      hasWifi: false,
-    },
-    demographics: {
-      students: undefined,
-      lgbtq: undefined,
-      englishOk: false,
-      malesOk: false,
-      nonSmoking: false,
-    },
-    contactLink: undefined,
-    contacted: false,
+    rawDescription: undefined,
+    isFurnished: false,
+    hasWashingMachine: false,
+    hasWifi: false,
+    studentsOk: undefined,
+    englishOk: false,
+    malesOk: false,
+    lgbtqOk: undefined,
+    nonSmoking: false,
+    contactUrl: undefined,
+    wasContacted: false,
   };
   // get costs
   let infoPanel = await driver.findElement(
@@ -125,31 +119,25 @@ export let enrichOffer = async (driver) => {
   for (let extendedInfoDiv of extendendInfos) {
     let extendedInfo = await extendedInfoDiv.getText();
     extendedInfo = extendedInfo.trim().replace(/\s\s+/g, " ");
-    if (
-      !enrichedOffer.demographics.students &&
-      extendedInfo.includes("Studenten")
-    ) {
-      enrichedOffer.demographics.students = true;
+    if (!enrichedOffer.studentsOk && extendedInfo.includes("Studenten")) {
+      enrichedOffer.studentsOk = true;
     }
-    if (!enrichedOffer.demographics.lgbtq && extendedInfo.includes("LGB")) {
-      enrichedOffer.demographics.lgbtq = true;
+    if (!enrichedOffer.lgbtqOk && extendedInfo.includes("LGB")) {
+      enrichedOffer.lgbtqOk = true;
     }
     if (
-      !enrichedOffer.demographics.nonSmoking &&
+      !enrichedOffer.nonSmoking &&
       extendedInfo.includes("Rauchen nicht erwünscht")
     ) {
-      enrichedOffer.demographics.nonSmoking = true;
+      enrichedOffer.nonSmoking = true;
     }
-    if (
-      !enrichedOffer.demographics.englishOk &&
-      extendedInfo.includes("Englisch")
-    ) {
-      enrichedOffer.demographics.englishOk = true;
+    if (!enrichedOffer.englishOk && extendedInfo.includes("Englisch")) {
+      enrichedOffer.englishOk = true;
     }
     if (extendedInfo.includes("Wohnungsgröße:")) {
       const apartmentSizeMatches = extendedInfo.match(/\d+/);
       const apartmentSize = parseInt(apartmentSizeMatches[0]);
-      enrichedOffer.apartmentSize = apartmentSize;
+      enrichedOffer.apartmentSizeSquareMeters = apartmentSize;
     }
   }
 
@@ -163,11 +151,11 @@ export let enrichOffer = async (driver) => {
       .trim()
       .replace(/\s\s+/g, " ");
     if (desiredGenderInfo.includes("geschlecht egal")) {
-      enrichedOffer.demographics.malesOk = true;
+      enrichedOffer.malesOk = true;
       break;
     }
     if (desiredGenderInfo.includes("mann")) {
-      enrichedOffer.demographics.malesOk = true;
+      enrichedOffer.malesOk = true;
       break;
     }
   }
@@ -182,17 +170,17 @@ export let enrichOffer = async (driver) => {
   for (let utility of utilities) {
     let utilityText = await utility.getText();
     utilityText = utilityText.trim().replace(/\s\s+/g, " ");
-    if (!enrichedOffer.features.hasWifi && utilityText === "WLAN") {
-      enrichedOffer.features.hasWifi = true;
+    if (!enrichedOffer.hasWifi && utilityText === "WLAN") {
+      enrichedOffer.hasWifi = true;
     }
-    if (!enrichedOffer.features.isFurnished && utilityText === "möbliert") {
-      enrichedOffer.features.isFurnished = true;
+    if (!enrichedOffer.isFurnished && utilityText === "möbliert") {
+      enrichedOffer.isFurnished = true;
     }
     if (
-      !enrichedOffer.features.hasWashingMachine &&
+      !enrichedOffer.hasWashingMachine &&
       utilityText.includes("Waschmaschine")
     ) {
-      enrichedOffer.features.hasWashingMachine = true;
+      enrichedOffer.hasWashingMachine = true;
     }
   }
 
@@ -205,7 +193,7 @@ export let enrichOffer = async (driver) => {
     await delaySeconds(2, 5);
     let description = await descriptionDiv.getText();
     description = description.trim().replace(/  +/g, " ");
-    enrichedOffer.description = description;
+    enrichedOffer.rawDescription = description;
   } catch (error) {
     try {
       let descriptionDiv = await driver.findElement(By.id("freitext_2"));
@@ -216,7 +204,7 @@ export let enrichOffer = async (driver) => {
       await delaySeconds(2, 5);
       let description = await descriptionDiv.getText();
       description = description.trim().replace(/  +/g, " ");
-      enrichedOffer.description = description;
+      enrichedOffer.rawDescription = description;
     } catch (error) {
       try {
         let descriptionDiv = await driver.findElement(By.id("freitext_3"));
@@ -227,7 +215,7 @@ export let enrichOffer = async (driver) => {
         await delaySeconds(2, 5);
         let description = await descriptionDiv.getText();
         description = description.trim().replace(/  +/g, " ");
-        enrichedOffer.description = description;
+        enrichedOffer.rawDescription = description;
       } catch (error) {}
     }
   }
@@ -238,7 +226,7 @@ export let enrichOffer = async (driver) => {
     contactButton
   );
   let contactLink = await contactButton.getAttribute("href");
-  enrichedOffer.contactLink = contactLink;
+  enrichedOffer.contactUrl = contactLink;
   const html = await driver.executeScript(
     "return document.getElementsByTagName('html')[0].outerHTML"
   );

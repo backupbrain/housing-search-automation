@@ -2,12 +2,13 @@ export let getOfferData = async (driver, listItem) => {
   let offer = {
     title: undefined,
     url: undefined,
-    description: undefined,
+    rawDescription: undefined,
     numTenants: undefined,
-    price: undefined,
-    contact: undefined,
-    size: undefined,
-    dates: { start: undefined, end: undefined },
+    rentPrice: undefined,
+    contactName: undefined,
+    roomSizeSquareMeters: undefined,
+    startDate: undefined,
+    endDate: undefined,
   };
   await driver.executeScript(
     "return arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' })",
@@ -29,8 +30,8 @@ export let getOfferData = async (driver, listItem) => {
     )
   );
   let descriptionText = await descriptionDiv.getText();
-  description = descriptionText.trim().replace(/\s\s+/g, " ");
-  offer.description = description;
+  let description = descriptionText.trim().replace(/\s\s+/g, " ");
+  offer.rawDescription = description;
 
   let tenantsInfoContainer = await listItem.findElement(
     By.xpath(
@@ -56,7 +57,7 @@ export let getOfferData = async (driver, listItem) => {
     price = rawPrice.replace(/ €/, "");
   }
   price = parseInt(price);
-  offer.price = price;
+  offer.rentPrice = price;
 
   let contactDiv = await listItem.findElement(
     By.xpath(
@@ -67,7 +68,7 @@ export let getOfferData = async (driver, listItem) => {
   );
   let contact = await contactDiv.getText();
   contact = contact.trim().replace(/\s\s+/g, " ");
-  offer.contact = contact;
+  offer.contactName = contact;
 
   let sizeDiv = await listItem.findElement(
     By.xpath(
@@ -81,7 +82,7 @@ export let getOfferData = async (driver, listItem) => {
     size = rawSize.replace(/ m²/, "");
   }
   size = parseInt(size);
-  offer.size = size;
+  offer.roomSizeSquareMeters = size;
 
   let datesDiv = await listItem.findElement(
     By.xpath(
@@ -106,6 +107,7 @@ export let getOfferData = async (driver, listItem) => {
       finalDates[key] = finalDate;
     }
   }
-  offer.dates = finalDates;
+  offer.startDate = finalDates.start;
+  offer.endDate = finalDates.end;
   return offer;
 };
