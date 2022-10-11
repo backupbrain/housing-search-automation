@@ -8,20 +8,19 @@ import { getOfferData } from "./getOfferData";
 
 export let scrapeEnrichedOffers = async (
   driver,
-  visitedUrls,
   currentPage,
   minutesUntilBreak,
   searchId,
   existingOfferUrls
 ) => {
-  let visitedUrls = existingOfferUrls.slice();
+  let visitedUrls = new Set(existingOfferUrls);
   let onBreak = false;
   let isDone = false; // await areMorePagesAvailable(driver);
-  // let currentPage = 1;
+  let latestCurrentPage = currentPage;
   let startTime = new Date();
   // let minutesUntilBreak = Math.floor(Math.random() * 50 + 30);
   while (!onBreak && !isDone) {
-    console.log(`Starting page ${currentPage}`);
+    console.log(`Starting page ${latestCurrentPage}`);
     let currentOffer = 0;
     let mainList = await driver.findElement(By.id("main_column"));
     let listItems = await mainList.findElements(
@@ -50,7 +49,7 @@ export let scrapeEnrichedOffers = async (
       let linkDiv = await listItem.findElement(By.xpath(".//h3/a"));
       let url = await linkDiv.getAttribute("href");
       if (!visitedUrls.has(url)) {
-        if ((currentOffer = listItems.length - 1)) {
+        if (currentOffer === listItems.length - 1) {
           console.log(
             "End of list contains visited urls, probably we've seen everything past here"
           );
@@ -66,7 +65,7 @@ export let scrapeEnrichedOffers = async (
         let combinedOffer = {
           ...offerData,
           ...enrichedOffer,
-          page: currentPage,
+          page: latestCurrentPage,
           row: currentOffer,
           wasEnriched: true,
         };
@@ -80,7 +79,7 @@ export let scrapeEnrichedOffers = async (
         );
       } else {
         console.log(
-          `Already visited row ${currentOffer} on page ${currentPage}`
+          `Already visited row ${currentOffer} on page ${latestCurrentPage}`
         );
       }
       currentOffer += 1;
@@ -89,7 +88,7 @@ export let scrapeEnrichedOffers = async (
     if (morePagesAvailable) {
       console.log("More pages are available");
       await clickNextButton(driver);
-      currentPage += 1;
+      latestCurrentPage += 1;
       morePagesAvailable = true;
       await delaySeconds(3, 7);
     } else {

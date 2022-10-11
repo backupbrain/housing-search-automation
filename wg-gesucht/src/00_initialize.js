@@ -1,5 +1,6 @@
 // node --experimental-repl-await
 import "dotenv/config";
+import { createSearch } from "./utils/database/createSearch";
 import { getOrCreateProfile } from "./utils/database/getOrCreateProfile";
 import { getOrCreateUser } from "./utils/database/getOrCreateUser";
 
@@ -47,7 +48,7 @@ let defaultSearch = {
 
 let user = await getOrCreateUser(defaultUser);
 let profile = await getOrCreateProfile(user, defaultProfile);
-let search = await createSearch(profile, defaultSearch);
+let search = await createSearch(profile.id, defaultSearch);
 
 console.log("profile found or created:");
 console.log(profile.id);

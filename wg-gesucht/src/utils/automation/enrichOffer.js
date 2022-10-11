@@ -2,7 +2,7 @@ let { By } = require("selenium-webdriver");
 const { delaySeconds } = require("../delaySeconds");
 
 let getDistrict = (address) => {
-  let postalCodeData = address.match(/ (1[\d]{2}0) /);
+  let postalCodeData = address.match(/\s(1[\d]{2}0) /);
   if (postalCodeData && postalCodeData.length >= 2) {
     let district = parseInt(postalCodeData[1].substring(1, 3));
     return district;
@@ -12,13 +12,13 @@ let getDistrict = (address) => {
 
 export let enrichOffer = async (driver) => {
   let enrichedOffer = {
-    title: undefined,
-    numTenants: undefined,
-    url: undefined,
-    roomSize: undefined,
+    // title: undefined,
+    // numTenants: undefined,
+    // url: undefined,
+    // roomSizeSquareMeters: undefined,
     apartmentSizeSquareMeters: undefined,
-    contact: undefined,
-    dates: undefined,
+    // contact: undefined,
+    // dates: undefined,
     html: undefined,
     rentPrice: undefined,
     extraCost: undefined,
@@ -70,20 +70,20 @@ export let enrichOffer = async (driver) => {
     }
     switch (header) {
       case "Miete":
-        enrichedOffer.prices.rent = price;
+        enrichedOffer.rentPrice = price;
         break;
       case "Sonstige Kosten":
-        enrichedOffer.prices.other = price;
+        enrichedOffer.otherCost = price;
         break;
       case "Kaution":
-        enrichedOffer.prices.deposit = price;
+        enrichedOffer.depositPrice = price;
         break;
       case "ablösevereinbarung":
-        enrichedOffer.prices.transfer = price;
+        enrichedOffer.transferCost = price;
         break;
       default:
         if (header.substring(0, 4) === "Nebe") {
-          enrichedOffer.prices.extra = price;
+          enrichedOffer.extraCost = price;
           break;
         }
         break;

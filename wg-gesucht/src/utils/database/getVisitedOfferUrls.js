@@ -5,6 +5,7 @@ export let getVisitedOfferUrls = async (profileId) => {
     where: { search: { profileId } },
     select: { url: true },
   });
-  const urls = offers.map((offer) => offer.url);
+  const urls = new Set();
+  offers.forEach((offer) => urls.add(offer.url));
   return urls;
 };

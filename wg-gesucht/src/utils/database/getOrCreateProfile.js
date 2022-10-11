@@ -1,4 +1,4 @@
-const { prisma } = require("./database/client");
+const { prisma } = require("../../database/client");
 
 export let getOrCreateProfile = async (user, defaultProfile) => {
   let foundProfile = await prisma.profile.findFirst({
