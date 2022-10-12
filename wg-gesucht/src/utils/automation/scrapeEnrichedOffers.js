@@ -36,7 +36,7 @@ export let scrapeEnrichedOffers = async (
         console.log(
           `Time limit of ${minutesUntilBreak} minutes exceeded. Taking coffee break`
         );
-        morePagesAvailable = false;
+        // morePagesAvailable = false;
         onBreak = true;
         break;
       }
@@ -57,6 +57,11 @@ export let scrapeEnrichedOffers = async (
         }
         await delaySeconds(3, 5);
         let offerData = await getOfferData(driver, listItem);
+        if (!offerData.contactName) {
+          console.log("  Advertisement. Skipping");
+          currentOffer++;
+          continue;
+        }
         await driver.executeScript("return arguments[0].click()", linkDiv);
         await delaySeconds(5, 6);
 

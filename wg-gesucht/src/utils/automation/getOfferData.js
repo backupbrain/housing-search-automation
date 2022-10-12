@@ -59,16 +59,20 @@ export let getOfferData = async (driver, listItem) => {
   price = parseInt(price);
   offer.rentPrice = price;
 
-  let contactDiv = await listItem.findElement(
-    By.xpath(
-      './/div[contains(@class,"card_body")]' +
-        "//div" +
-        '/span[contains(@class,"ml5")]'
-    )
-  );
-  let contact = await contactDiv.getText();
-  contact = contact.trim().replace(/\s\s+/g, " ");
-  offer.contactName = contact;
+  try {
+    let contactDiv = await listItem.findElement(
+      By.xpath(
+        './/div[contains(@class,"card_body")]' +
+          "//div" +
+          '/span[contains(@class,"ml5")]'
+      )
+    );
+    let contact = await contactDiv.getText();
+    contact = contact.trim().replace(/\s\s+/g, " ");
+    offer.contactName = contact;
+  } catch (error) {
+    console.log(error);
+  }
 
   let sizeDiv = await listItem.findElement(
     By.xpath(

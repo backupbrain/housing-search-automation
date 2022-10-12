@@ -1,10 +1,9 @@
 const { prisma } = require("./database/client");
 
-export let getSearch = async (profileId, searchId) => {
-  return await prisma.profile.findFirst({
+export let getSearch = async (searchId) => {
+  return await prisma.search.findFirst({
     where: {
-      searchId,
-      profileId,
+      id: searchId,
     },
   });
 };

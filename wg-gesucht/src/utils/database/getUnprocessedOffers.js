@@ -11,7 +11,8 @@ export let getUnprocessedOffers = async (searchId) => {
   // there may be offers from other searches we haven't contacted that were
   // visited and therefore not re-scraped
   const where = {
-    search: { profileId: search.profileId },
+    searchId,
+    // search: { profileId: search.profileId },
     wasContacted: false,
     wasAnalyzed: false,
   };
@@ -19,25 +20,25 @@ export let getUnprocessedOffers = async (searchId) => {
     where.district = { in: desiredDistricts };
   }
   if (search.minPrice) {
-    where.rentPrice_gte = search.minPrice;
+    where.rentPrice = { gte: search.minPrice };
   }
   if (search.maxPrice) {
-    where.rentPrice_lte = search.maxPrice;
+    where.rentPrice = { lte: search.maxPrice };
   }
   if (search.startDateMin) {
-    where.startDate_gte = search.startDateMin;
+    where.startDate = { gte: search.startDateMin };
   }
   if (search.startDateMax) {
-    where.startDate_lte = search.startDateMax;
+    where.startDate = { lte: search.startDateMax };
   }
   if (search.endDateMin) {
-    where.endDate_gte = search.endDateMin;
+    where.endDate = { gte: search.endDateMin };
   }
   if (search.endDateMax) {
-    where.endDate_lte = search.endDateMax;
+    where.endDate = { lte: search.endDateMax };
   }
   if (search.minRoomSizeSquareMeters) {
-    where.roomSizeSquareMeters_lte = search.minRoomSizeSquareMeters;
+    where.roomSizeSquareMeters = { lte: search.minRoomSizeSquareMeters };
   }
   if (search.mustBeFurnished) {
     where.isFurnished = true;
@@ -45,7 +46,7 @@ export let getUnprocessedOffers = async (searchId) => {
   if (search.needsWashingMachine) {
     where.hasWashingMachine = true;
   }
-  if (search.needsWashingMachine) {
+  if (search.needsWifi) {
     where.hasWifi = true;
   }
   if (search.mustBeStudensOk) {
@@ -54,14 +55,15 @@ export let getUnprocessedOffers = async (searchId) => {
   if (search.mustBeEnglishOk) {
     where.englishOk = true;
   }
-  if (search.mustBeMalesOk) {
-    where.malesOk = true;
-  }
+  // if (search.mustBeMalesOk) {
+  //   where.malesOk = true;
+  // }
   if (search.mustBeLgbtqOk) {
     where.lgbtqOk = true;
   }
   if (search.mustBeNonSmoking) {
     where.nonSmoking = true;
   }
+  console.log({ where });
   return await prisma.offer.findMany({ where });
 };

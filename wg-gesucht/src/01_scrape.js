@@ -7,7 +7,7 @@ import { startBrowser } from "./utils/automation/startBrowser";
 import { getSearch } from "./utils/database/getSearch";
 import { getVisitedOfferUrls } from "./utils/database/getVisitedOfferUrls";
 
-let search = await getSearch(profileId, searchId);
+let search = await getSearch(searchId);
 
 let driver = await startBrowser();
 await goToSearchPage(driver, search);
